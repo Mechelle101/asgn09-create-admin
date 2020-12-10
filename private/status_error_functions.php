@@ -1,5 +1,14 @@
 <?php
 
+function require_login() {
+  global $session;
+  if(!$session->is_logged_in()) {
+    redirect_to(url_for('/bird-staff/login.php'));
+  } else {
+    // Do nothing, just let the rest of the page run
+  }
+}
+
   // is_blank('abcd')
   // * validate data presence
   // * uses trim() so empty spaces don't count
@@ -24,17 +33,19 @@ function display_errors($errors=array()) {
   return $output;
 }
 
-function get_and_clear_session_message() {
-  if(isset($_SESSION['message']) && $_SESSION['message'] != '') {
-    $msg = $_SESSION['message'];
-    unset($_SESSION['message']);
-    return $msg;
-  }
-}
+// function get_and_clear_session_message() {
+//   if(isset($_SESSION['message']) && $_SESSION['message'] != '') {
+//     $msg = $_SESSION['message'];
+//     unset($_SESSION['message']);
+//     return $msg;
+//   }
+// }
 
 function display_session_message() {
-  $msg = get_and_clear_session_message();
+  global $session;
+  $msg = $session->message();
   if(isset($msg) && $msg != '') {
+    $session->clear_message();
     return '<div id="message">' . h($msg) . '</div>';
   }
 }
@@ -132,6 +143,14 @@ function display_session_message() {
   //   has_unique_username('johnqpublic', 4)
   function has_unique_username($username, $current_id="0") {
     // Need to re-write for OOP
+    $admin = Admin::find_by_username($username);
+    if($admin === false || $admin->id == $current_id) {
+      // Is unique
+      return true;
+    } else {
+      // Not unique
+      return false;
+    }
   }
 
 ?>

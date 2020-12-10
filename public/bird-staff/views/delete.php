@@ -2,6 +2,8 @@
 
 require_once('../../../private/initialize.php');
 
+require_login();
+
 if(!isset($_GET['id'])) {
   redirect_to(url_for('/bird-staff/views/index.php'));
 }
@@ -14,8 +16,7 @@ if($bird == false) {
 if(is_post_request()) {
   // Delete bird
   $result = $bird->delete();
-
-  $_SESSION['message'] = 'The bird was deleted successfully.';
+  $session->message('The bird was deleted successfully.');
   redirect_to(url_for('/bird-staff/views/index.php'));
 
 } else {

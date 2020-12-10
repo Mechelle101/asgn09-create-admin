@@ -1,8 +1,6 @@
 <?php
   ob_start(); // turn on output buffering
 
-  // session_start(); // turn on sessions if needed
-
   // Assign file paths to PHP constants
   // __FILE__ returns the current path to this file
   // dirname() returns the path to the parent directory
@@ -31,6 +29,7 @@
   include('classes/databaseobject.class.php');
   include('classes/bird.class.php');
   include('classes/admin.class.php');
+  include('classes/session.class.php');
   include('classes/parsecsv.class.php');
   
   // Autoload class definitions
@@ -45,5 +44,7 @@
 
   $database = db_connect();
   DatabaseObject::set_database($database);
+
+  $session = new Session;
 
 ?>

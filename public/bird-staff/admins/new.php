@@ -2,6 +2,8 @@
 
 require_once('../../../private/initialize.php');
 
+require_login();
+
 if(is_post_request()) {
 
   // Create record using post parameters
@@ -12,7 +14,7 @@ if(is_post_request()) {
   //May need to change this to just two ==
   if($result == true) {
     $new_id = $admin->id;
-    $_SESSION['message'] = 'The admin was created successfully.';
+    $session->message('The admin was created successfully.');
     redirect_to(url_for('/bird-staff/admins/show.php?id=' . $new_id));
   } else {
     // show errors

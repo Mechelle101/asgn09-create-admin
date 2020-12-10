@@ -1,11 +1,11 @@
 <?php require_once('../../../private/initialize.php'); ?>
 
-<?php
+<?php require_login(); ?>
 
+<?php
 $id = $_GET['id'] ?? '1'; // PHP > 7.0
 
 $bird = Bird::find_by_id($id);
-
 ?>
 
 <?php $page_title = 'Show Birds: ' . h($bird->common_name); ?>

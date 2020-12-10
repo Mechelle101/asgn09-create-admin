@@ -38,6 +38,10 @@ class Admin extends DatabaseObject {
     $this->hashed_password = password_hash($this->password, PASSWORD_BCRYPT);
   }
 
+  public function verify_password($password) {
+    return password_verify($password, $this->hashed_password);
+  }
+
   protected function create() {
     $this->set_hashed_password();
     return parent::create();
@@ -83,9 +87,12 @@ protected function validate() {
     $this->errors[] = "Username cannot be blank.";
   } elseif (!has_length($this->username, array('min' => 8, 'max' => 255))) {
     $this->errors[] = "Username must be between 8 and 255 characters.";
+  } elseif (!has_unique_username($this->username, $this->id ?? 0)) {
+    $this->errors[] = "Username not allowed. Try again";
   }
 
   if($this->password_required) {
+
   if(is_blank($this->password)) {
     $this->errors[] = "Password cannot be blank.";
   } elseif (!has_length($this->password, array('min' => 12))) {
@@ -106,8 +113,18 @@ protected function validate() {
     $this->errors[] = "Password and confirm password must match.";
   }
 }
-
   return $this->errors;
+}
+
+static public function find_by_username($username) {
+  $sql = "SELECT * FROM " . static::$table_name . " ";
+  $sql .= "WHERE username=" . self::$database->quote($username);
+  $object_array = static::find_by_sql($sql);
+  if(!empty($object_array)) {
+      return array_shift($object_array);
+  }   else    {
+      return false;
+  }
 }
 
 }

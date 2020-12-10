@@ -1,5 +1,7 @@
 <?php require_once('../../../private/initialize.php'); ?>
 
+<?php require_login(); ?>
+
 <?php $birds = Bird::find_all();?>
 <?php $page_title = 'WNC Birds'; ?>
 <?php include(SHARED_PATH . '/bird-staff-header.php'); ?>
